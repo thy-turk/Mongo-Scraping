@@ -2,8 +2,9 @@ var express = require("express");
 var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
+var exphbs = require("express-handlebars");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 var db = require("./models");
 
@@ -14,12 +15,20 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+app.engine(
+    "handlebars",
+    exphbs({
+      defaultLayout: "main"
+    })
+);
+app.set("view engine", "handlebars");
+
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.connect(MONGODB_URI);
 
 app.get("/", function (req, res) {
-    res.send("Fuck you")
+    res.render("land");
 })
 
 app.get("/drop", function (req, res) {
