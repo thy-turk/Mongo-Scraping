@@ -116,7 +116,7 @@ $(document).on("click", "#commentbtn", function() {
     console.log($("#newtitle").val());
     $.ajax({
         method: "POST",
-        url: "/articles/" + artId,
+        url: '/articles/' + artId,
         data: {
             title: $("#newtitle").val(),
             body: $("#newcomment").val()

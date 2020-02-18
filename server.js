@@ -42,17 +42,17 @@ app.get("/drop", function (req, res) {
 })
 
 app.get("/scrape", function (req, res) {
-    axios.get("http://www.echojs.com/").then(function (response) {
+    axios.get("https://www.washingtonpost.com/science/").then(function (response) {
         var $ = cheerio.load(response.data);
 
-        $("article h2").each(function (i, element) {
+        $("div.story-body").each(function (i, element) {
             var result = {};
 
-            result.headline = $(this).children("a").text();
+            result.headline = $(this).find("h2").children("a").text();
 
-            result.url = $(this).children("a").attr("href");
+            result.url = $(this).find("h2").children("a").attr("href");
 
-            result.summary = "Test Summary"
+            result.summary = $(this).find("div.story-description").children("p").text();
 
             db.Article.create(result)
                 .then(function (dbArticle) {
@@ -96,7 +96,7 @@ app.get("/articles/:id", function (req, res) {
     db.Article.find().sort({ "_id": -1 })
         db.Comment.create(req.body)
         .then(function (dbComment) {
-        return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbComment._id }, { new: true });
+        return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbComment._id }, { new: true });
         })
         .then(function (dbArticle) {
             res.json(dbArticle);
