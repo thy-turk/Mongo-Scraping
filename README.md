@@ -10,7 +10,7 @@ This app uses both front end and back end technologies and combines them for a f
 ## Try the app here:
 https://shrouded-savannah-50616.herokuapp.com/
 
-![App Screenshot](/public/assets/images/screenshot.png)
+![App Screenshot](public\images\screenshot.png)
 
 ## Tools Used:
 * Node
