@@ -14,7 +14,6 @@ $.ajax({
             "</div>"
         );
     };
-    console.log(response[0])
 });
 
 $.ajax({
@@ -34,7 +33,7 @@ $.ajax({
             "</div>"
         );
     };
-    // console.log(response[0])
+    console.log(response[0])
 });
 
 $("#scrape").on("click", function () {
@@ -89,7 +88,8 @@ $(document).on("click", "#comment", function () {
         url: "/articles/" + artId
     })
     .then(function(data) {
-    $(".commentform").append(
+        
+        $(".commentform").append(
         "<form>" +
         "<div class='form-group'>" +
         "<input type='text' class='form-control' id='newtitle' placeholder='Title'>" +
@@ -108,7 +108,9 @@ $(document).on("click", "#comment", function () {
         "</div>" +
         "</div>"
     )
+    console.log(data.comment.title);
     })
+    
 });
 
 $(document).on("click", "#commentbtn", function() {

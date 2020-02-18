@@ -3,9 +3,15 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var CommentSchema = new Schema({
-    title: String,
+    title: {
+        type: String,
+        default: ""
+    },
     
-    body: String
+    body: {
+        type: String,
+        default: ""
+    }
 });
 
 var Comment = mongoose.model("Comment", CommentSchema);
