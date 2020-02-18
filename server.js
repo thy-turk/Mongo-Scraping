@@ -18,7 +18,7 @@ app.use(express.static("public"));
 app.engine(
     "handlebars",
     exphbs({
-      defaultLayout: "main"
+        defaultLayout: "main"
     })
 );
 app.set("view engine", "handlebars");
@@ -29,6 +29,10 @@ mongoose.connect(MONGODB_URI);
 
 app.get("/", function (req, res) {
     res.render("land");
+})
+
+app.get("/savedpage", function (req, res) {
+    res.render("saved");
 })
 
 app.get("/drop", function (req, res) {
@@ -58,17 +62,13 @@ app.get("/scrape", function (req, res) {
                     console.log(err);
                 });
 
-            // var headline = temp;
-            // var summary = temp;
-            // var url = temp;
-
         })
         res.send("Scrape Complete");
     })
 });
 
 app.get("/articles", function (req, res) {
-    db.Article.find({})
+    db.Article.find({ saved: false }).sort({ "_id": -1 })
         .then(function (dbArticle) {
             res.json(dbArticle);
         })
@@ -76,6 +76,57 @@ app.get("/articles", function (req, res) {
             res.json(err);
         });
 });
+
+// app.get("/articles/:id", function (req, res) {
+//     db.Article.find({ saved: false }).sort({ "_id": -1 })
+//         db.Comment.create(req.body)
+//         .then(function (dbComment) {
+//         return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbComment._id }, { new: true });
+//         })
+//         .then(function (dbArticle) {
+//             res.json(dbArticle);
+//         })
+//         .catch(function (err) {
+//             res.json(err);
+//         });
+// });
+
+
+app.get("/saved", function (req, res) {
+    db.Article.find({ saved: true }).sort({ "_id": -1 })
+        .then(function (dbArticle) {
+            res.json(dbArticle);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
+});
+
+app.post("/saved/:id", function (req, res) {
+    db.Article.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { saved: true } }
+    )
+        .then(function (dbArticle) {
+            res.json(dbArticle)
+        })
+        .catch(function (err) {
+            res.json(err)
+        })
+});
+
+app.post("/remove/:id", function (req, res) {
+    db.Article.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { saved: false } }
+    )
+        .then(function (dbArticle) {
+            res.json(dbArticle)
+        })
+        .catch(function (err) {
+            res.json(err)
+        })
+})
 
 app.listen(PORT, function () {
     console.log("App running at http://localhost:" + PORT);
