@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var exphbs = require("express-handlebars");
+var logger = require("morgan");
 
 var PORT = process.env.PORT || 3000;
 
@@ -10,6 +11,8 @@ var db = require("./models");
 
 var app = express();
 
+
+app.use(logger("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -92,7 +95,7 @@ app.get("/articles/:id", function(req, res) {
       });
   });
 
-app.get("/articles/:id", function (req, res) {
+app.post("/articles/:id", function (req, res) {
     db.Article.find().sort({ "_id": -1 })
         db.Comment.create(req.body)
         .then(function (dbComment) {
