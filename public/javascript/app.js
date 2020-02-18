@@ -5,13 +5,13 @@ $.ajax({
     for (let i = 0; i < 15; i++) {
         $(".articles").append(
             "<div class='card'>" +
-                "<div class='card-header'>" + response[i].headline + "</div>" +
-                "<div class='card-body'>" + 
-                    "<p class='card-text'>" + response[i].summary + "</p>" +
-                    "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='savebtn'>Save Article</button>" +
-                    "<a href='"+ response[i].url + "' class='btn btn-primary'>Visit Site</a>" +
-                "</div>" +
-            "</div>" 
+            "<div class='card-header'>" + response[i].headline + "</div>" +
+            "<div class='card-body'>" +
+            "<p class='card-text'>" + response[i].summary + "</p>" +
+            "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='savebtn'>Save Article</button>" +
+            "<a href='" + response[i].url + "' class='btn btn-primary'>Visit Site</a>" +
+            "</div>" +
+            "</div>"
         );
     };
     console.log(response[0])
@@ -24,20 +24,20 @@ $.ajax({
     for (let i = 0; i < response.length; i++) {
         $(".savedArticles").append(
             "<div class='card'>" +
-                "<div class='card-header'>" + response[i].headline + "</div>" +
-                "<div class='card-body'>" + 
-                    "<p class='card-text'>" + response[i].summary + "</p>" +
-                    "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='removebtn'>Remove From Saved</button>" +
-                    "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='comment'>Comment</button>" +
-                    "<a href='"+ response[i].url + "' class='btn btn-primary'>Visit Site</a>" +
-                "</div>" +
-            "</div>" 
+            "<div class='card-header'>" + response[i].headline + "</div>" +
+            "<div class='card-body'>" +
+            "<p class='card-text'>" + response[i].summary + "</p>" +
+            "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='removebtn'>Remove From Saved</button>" +
+            "<button type='button' artId='" + response[i]._id + "' class='btn btn-dark' id='comment'>Comment</button>" +
+            "<a href='" + response[i].url + "' class='btn btn-primary'>Visit Site</a>" +
+            "</div>" +
+            "</div>"
         );
     };
-    console.log(response[0])
+    // console.log(response[0])
 });
 
-$("#scrape").on("click", function() {
+$("#scrape").on("click", function () {
     $.ajax({
         url: "/scrape",
         method: "GET"
@@ -46,7 +46,7 @@ $("#scrape").on("click", function() {
     })
 });
 
-$("#saved").on("click", function() {
+$("#saved").on("click", function () {
     $.ajax({
         url: "/saved",
         method: "GET"
@@ -55,9 +55,9 @@ $("#saved").on("click", function() {
     })
 });
 
-$(document).on("click", "#savebtn", function() {
+$(document).on("click", "#savebtn", function () {
     artId = $(this).attr("artId");
-    
+
     $.ajax({
         url: "/saved/" + artId,
         method: "POST"
@@ -67,9 +67,9 @@ $(document).on("click", "#savebtn", function() {
     })
 });
 
-$(document).on("click", "#removebtn", function() {
+$(document).on("click", "#removebtn", function () {
     artId = $(this).attr("artId");
-    
+
     $.ajax({
         url: "/remove/" + artId,
         method: "POST"
@@ -79,7 +79,54 @@ $(document).on("click", "#removebtn", function() {
     })
 });
 
-$(document).on("click", "#comment", function() {
+$(document).on("click", "#comment", function () {
     artId = $(this).attr("artId");
+    console.log(artId);
     $("#modalpopup").modal();
+
+    $.ajax({
+        method: "GET",
+        url: "/articles/" + artId
+    })
+    .then(function(data) {
+    $(".commentform").append(
+        "<form>" +
+        "<div class='form-group'>" +
+        "<input type='text' class='form-control' id='newtitle' placeholder='Title'>" +
+        "</div>" +
+        "<div class='form-group'>" +
+        "<input type='text' class='form-control' id='newcomment' placeholder='Comment'>" +
+        "</div>" +
+        "<button type='submit' artId='" + data._id + "' id='commentbtn' class='btn btn-primary'>Save Comment</button>" +
+        "</form>" +
+
+        "<div class='card'>" +
+        "<div class='card-header'><div class='datatitle'></div></div>" +
+        "<div class='card-body'>" +
+        "<p class='card-text'><div class='databody'></p>" +
+        "</div>" +
+        "</div>" +
+        "</div>"
+    )
+    })
 });
+
+$(document).on("click", "#commentbtn", function() {
+    var artId = $(this).attr("artId");
+    console.log($("#newtitle").val());
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + artId,
+        data: {
+            title: $("#newtitle").val(),
+            body: $("#newcomment").val()
+        }
+    })
+    .then(function(data) {
+        console.log(data)
+        $(".datatitle") = data.comment.title
+        $(".databody") = data.comment.title
+    })
+
+})
+
