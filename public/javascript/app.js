@@ -88,7 +88,14 @@ $(document).on("click", "#comment", function () {
         url: "/articles/" + artId
     })
     .then(function(data) {
-        
+        if (typeof data.comment !== "undefined") {
+
+            doctitle = data.comment.title;
+            docbody = data.comment.body;
+        } else {
+            doctitle = "Empty";
+            docbody = "Empty";
+        }
         $(".commentform").append(
         "<form>" +
         "<div class='form-group'>" +
@@ -101,9 +108,9 @@ $(document).on("click", "#comment", function () {
         "</form>" +
 
         "<div class='card'>" +
-        "<div class='card-header'>'" + data.comment.title + "'</div></div>" +
+        "<div class='card-header'>'" + doctitle + "'</div></div>" +
         "<div class='card-body'>" +
-        "<p class='card-text'>'" + data.comment.body + "'</p>" +
+        "<p class='card-text'>'" + docbody + "'</p>" +
         "</div>" +
         "</div>" +
         "</div>"
