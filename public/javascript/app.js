@@ -1,3 +1,4 @@
+// Gets all the articles from the API and displays them
 $.ajax({
     url: "/articles",
     method: "GET"
@@ -16,6 +17,7 @@ $.ajax({
     };
 });
 
+// Gets saved articles and displays them
 $.ajax({
     url: "/saved",
     method: "GET"
@@ -36,6 +38,7 @@ $.ajax({
     console.log(response[0])
 });
 
+// Function that scapes website when button is pressed
 $("#scrape").on("click", function () {
     $.ajax({
         url: "/scrape",
@@ -45,6 +48,7 @@ $("#scrape").on("click", function () {
     })
 });
 
+// Redirects to the saved page
 $("#saved").on("click", function () {
     $.ajax({
         url: "/saved",
@@ -54,6 +58,7 @@ $("#saved").on("click", function () {
     })
 });
 
+// Saves an article to the saved section
 $(document).on("click", "#savebtn", function () {
     artId = $(this).attr("artId");
 
@@ -66,6 +71,7 @@ $(document).on("click", "#savebtn", function () {
     })
 });
 
+// Removes an article from the saved section
 $(document).on("click", "#removebtn", function () {
     artId = $(this).attr("artId");
 
@@ -78,6 +84,7 @@ $(document).on("click", "#removebtn", function () {
     })
 });
 
+// Adds comments to the comment sections of the article
 $(document).on("click", "#comment", function () {
     artId = $(this).attr("artId");
     console.log(artId);

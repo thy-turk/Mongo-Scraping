@@ -8,7 +8,7 @@ This app uses both front end and back end technologies and combines them for a f
 
 
 ## Try the app here:
-https://vast-chamber-45148.herokuapp.com/savedpage
+https://vast-chamber-45148.herokuapp.com
 
 ![App Screenshot](/public/images/screenshot.png)
 
